@@ -1,0 +1,12 @@
+
+使用方法：./INSTALL swcsm36.drv [POLLING] [KERNEL]
+解释：POLLING和KERNEL位置可以互换，这两个位置表示密码卡工作模式，工作模式有POLLING/INTERRUPT 以及是否支持内核调用KERNEL
+
+./INSTALL  swcsm36.drv 表示POLLING，KERNEL位置为空，密码卡工作模式为POLLING不支持内核调用
+./INSTALL swcsm36.drv  POLLING KERNEL 等同于./INSTALL swcsm36.drv KERNEL  POLLING
+工作模式说明：密码卡工作在轮询模式(POLLING)比在中断模式(INTERRUPT)有好的性能，但占用的硬件资源；内核调用(KERNEL)提供内核调用接口
+
+执行完后会产生文件swcsm36.ko 以及Module.symvers文件，在使用内核调用接口时会用到Module.symvers文件。
+
+加载驱动可以直接使用insmod,卸载使用rmmod; 
+modinfo swcsm36.ko其中有一行输出为description: SanSec swxa Card VER:2.0才可以直接使用insmod/rmmod加载卸载

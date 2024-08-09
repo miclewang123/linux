@@ -1,0 +1,6 @@
+使用方法：./INSTALL swcsm.drv
+执行完后会产生文件swcsm.ko 以及Module.symvers文件，在使用内核调用接口时会用到Module.symvers文件。
+
+ ./INSTALL sm.drv编译出sm.ko，本驱动模块是注册cryptoAPI接口
+先使用insmod 命令加载swcsm.ko，再用insmod命令加载sm.ko
+

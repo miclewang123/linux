@@ -341,6 +341,27 @@ static struct xfrm_algo_desc aalg_list[] = {
 
 	.pfkey_supported = 0,
 },
+{
+	.name = "hmac(sm3)",
+	.compat = "sm3",
+
+	.uinfo = {
+		.auth = {
+			//.icv_truncbits = 256,
+			.icv_truncbits = 96,
+			.icv_fullbits = 256,
+		}
+	},
+
+	.pfkey_supported = 1,
+
+	.desc = {
+		.sadb_alg_id = SADB_X_AALG_SM3_256HMAC,
+		.sadb_alg_ivlen = 0,
+		.sadb_alg_minbits = 256,
+		.sadb_alg_maxbits = 256
+	}
+},
 };
 
 static struct xfrm_algo_desc ealg_list[] = {
@@ -552,6 +573,48 @@ static struct xfrm_algo_desc ealg_list[] = {
 		.sadb_alg_maxbits = 288
 	}
 },
+{
+	.name = "cbc(sm4)",
+	.compat = "sm4",
+
+	.uinfo = {
+		.encr = {
+			.geniv = "echainiv",
+			.blockbits = 128,
+			.defkeybits = 128,
+		}
+	},
+
+	.pfkey_supported = 1,
+
+	.desc = {
+		.sadb_alg_id = SADB_X_EALG_SM4CBC,
+		.sadb_alg_ivlen = 16,
+		.sadb_alg_minbits = 128,
+		.sadb_alg_maxbits = 256
+	}
+},
+{
+	.name = "cbc(sm1)",
+	.compat = "sm1",
+
+	.uinfo = {
+		.encr = {
+			.geniv = "echainiv",
+			.blockbits = 128,
+			.defkeybits = 128,
+		}
+	},
+
+	.pfkey_supported = 1,
+
+	.desc = {
+		.sadb_alg_id = SADB_X_EALG_SM1CBC,
+		.sadb_alg_ivlen = 16,
+		.sadb_alg_minbits = 128,
+		.sadb_alg_maxbits = 256
+	}
+},
 };
 
 static struct xfrm_algo_desc calg_list[] = {
@@ -637,10 +700,10 @@ static const struct xfrm_algo_list xfrm_calg_list = {
 	.mask = CRYPTO_ALG_TYPE_MASK,
 };
 
-static struct xfrm_algo_desc *xfrm_find_algo(
-	const struct xfrm_algo_list *algo_list,
-	int match(const struct xfrm_algo_desc *entry, const void *data),
-	const void *data, int probe)
+static struct xfrm_algo_desc *
+xfrm_find_algo(const struct xfrm_algo_list *algo_list,
+	       int match(const struct xfrm_algo_desc *entry, const void *data),
+	       const void *data, int probe)
 {
 	struct xfrm_algo_desc *list = algo_list->algs;
 	int i, status;
@@ -738,7 +801,8 @@ static int xfrm_aead_name_match(const struct xfrm_algo_desc *entry,
 	       !strcmp(name, entry->name);
 }
 
-struct xfrm_algo_desc *xfrm_aead_get_byname(const char *name, int icv_len, int probe)
+struct xfrm_algo_desc *xfrm_aead_get_byname(const char *name, int icv_len,
+					    int probe)
 {
 	struct xfrm_aead_name data = {
 		.name = name,
@@ -792,8 +856,8 @@ void xfrm_probe_algs(void)
 	}
 
 	for (i = 0; i < calg_entries(); i++) {
-		status = crypto_has_comp(calg_list[i].name, 0,
-					 CRYPTO_ALG_ASYNC);
+		status =
+			crypto_has_comp(calg_list[i].name, 0, CRYPTO_ALG_ASYNC);
 		if (calg_list[i].available != status)
 			calg_list[i].available = status;
 	}

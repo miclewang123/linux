@@ -354,8 +354,9 @@ static int read_symbols(struct elf *elf)
 
 	symtab = find_section_by_name(elf, ".symtab");
 	if (!symtab) {
-		WARN("missing symbol table");
-		return -1;
+		//WARN("missing symbol table");
+		//return -1;
+		return 0;
 	}
 
 	symtab_shndx = find_section_by_name(elf, ".symtab_shndx");

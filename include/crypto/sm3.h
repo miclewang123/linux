@@ -32,6 +32,8 @@ struct sm3_state {
 
 struct shash_desc;
 
+extern int crypto_sm3_init(struct shash_desc *desc);
+
 extern int crypto_sm3_update(struct shash_desc *desc, const u8 *data,
 			      unsigned int len);
 
@@ -39,4 +41,5 @@ extern int crypto_sm3_final(struct shash_desc *desc, u8 *out);
 
 extern int crypto_sm3_finup(struct shash_desc *desc, const u8 *data,
 			     unsigned int len, u8 *hash);
+
 #endif
